@@ -7,30 +7,30 @@
 package csci230_finalproject;
 
 /**
- * @T type
+ * @AnyType type
  * @author Home
  */
-public interface HashingInterface<T>
+public interface HashingInterface<AnyType>
 {
     /**
      * 
      * @param t 
      */
-    public void addValue( T t );
+    public void addValue( AnyType t );
     
     /**
      * 
      * @param key
      * @return 
      */
-    public T removeValue(int key);
+    public AnyType removeValue(int key);
     
     /**
      * 
      * @param key
      * @return 
      */    
-    public T getValue(int key);
+    public AnyType getValue(int key);
     
     /**
      * 
@@ -38,5 +38,12 @@ public interface HashingInterface<T>
      * @param key
      * @return 
      */
-    public Boolean isCollison(T newValue, int key);
+    public Boolean isCollison(AnyType newValue, int key);
+    
+    /**
+     * 
+     * @param key
+     * @return 
+     */
+    public int hash(AnyType key);
 }
