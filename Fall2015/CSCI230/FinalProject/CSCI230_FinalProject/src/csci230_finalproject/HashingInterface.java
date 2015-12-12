@@ -7,43 +7,40 @@
 package csci230_finalproject;
 
 /**
- * @AnyType type
+ * 
  * @author Home
+ * @param <AnyType> 
  */
 public interface HashingInterface<AnyType>
 {
     /**
      * 
-     * @param t 
+     * @param t
+     * @throws UnhashableDataTypeException 
      */
-    public void addValue( AnyType t );
+    public void addValue( AnyType key )throws UnhashableDataTypeException;
     
     /**
      * 
      * @param key
-     * @return 
+     * @return
+     * @throws UnhashableDataTypeException 
      */
-    public AnyType removeValue(int key);
+    public AnyType removeValue(AnyType key) throws UnhashableDataTypeException;
     
     /**
      * 
      * @param key
-     * @return 
-     */    
-    public AnyType getValue(int key);
-    
-    /**
-     * 
-     * @param newValue
-     * @param key
-     * @return 
-     */
-    public Boolean isCollison(AnyType newValue, int key);
+     * @return
+     * @throws UnhashableDataTypeException 
+     */  
+    public Object[] getValues(AnyType key) throws UnhashableDataTypeException;
     
     /**
      * 
      * @param key
-     * @return 
+     * @return
+     * @throws UnhashableDataTypeException 
      */
-    public int hash(AnyType key);
+    public int getHashValue(AnyType key)throws UnhashableDataTypeException;
 }

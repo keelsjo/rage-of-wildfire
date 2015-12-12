@@ -178,4 +178,62 @@ public class SinglyLinkedList<AnyType extends Comparable<? super AnyType>> imple
 		headNode = null;
                 size = 0;
 	} // end clear method
+
+    /**
+     * 
+     * @param t
+     * @return 
+     */
+    public AnyType removeData(AnyType t)
+    {
+        AnyType found = null;
+        
+        if(size == 1){
+            Node current = headNode;
+            
+            if(current.getData() == t){
+                found = (AnyType)current.getData();
+                headNode = null;
+            }
+        }
+        else if(size > 1){
+            Node prev = headNode;
+            Node current = prev.getNextNode();
+            
+            if(prev.getData() == t){
+                found = (AnyType)prev.getData();
+                headNode = current;
+            }
+            else{
+                for(int i = 1; i < size; i++){
+                    if(current.getData() == t){
+                        found = (AnyType)current.getData();
+                        prev.setNextNode(current.getNextNode());
+                        break;
+                    }
+                    else{
+                        prev = current;
+                        current = prev.getNextNode();
+                    }
+                }
+            }
+        }     
+        return found;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public Object[] getAllData()
+    {
+        Object[] newArr = new Object[size];
+        Node current = headNode;
+        
+        for(int i = 0; i < size; i++){
+            newArr[i] = current.getData();
+            current = current.getNextNode();
+        }
+        return newArr;
+    }
 } // end SinglyLinkedList class definition

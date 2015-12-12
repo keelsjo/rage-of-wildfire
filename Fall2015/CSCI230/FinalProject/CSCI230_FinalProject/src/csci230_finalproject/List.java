@@ -45,6 +45,13 @@ public interface List <AnyType> {
 	 * @throws IndexOutOfBoundsException
 	 */
 	public AnyType remove( int index ) throws IndexOutOfBoundsException;
+        
+        /**
+         * 
+         * @param t
+         * @return 
+         */	 
+	public AnyType removeData( AnyType t );
 	
 	/**
 	 * Returns the element at the specified position in this list.
@@ -54,12 +61,18 @@ public interface List <AnyType> {
 	 * @throws IndexOutOfBoundsException
 	 */
 	public AnyType get( int index )  throws IndexOutOfBoundsException;
-	
-	/**
-	 * Returns the number of elements in this list. 
-	 * 
-	 * @return
-	 */
+	        
+        /**
+         * 
+         * @return 
+         */
+        public Object[] getAllData();
+        
+        /**
+         * Returns the number of elements in this list.
+         * 
+         * @return 
+         */
 	public int size();
 	
 	/**

@@ -7,43 +7,65 @@
 package csci230_finalproject;
 
 import java.util.Arrays;
+import java.util.ArrayList;
 
 /**
- *
+ * 
  * @author Home
+ * @param <AnyType> 
  */
-public class OpenHashing<AnyType> implements HashingInterface<AnyType>
+public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements HashingInterface<AnyType>
 {
-    private int size = 100;
-    private Object[] array;
+    private final int size = 100;
+    private final SinglyLinkedList[] array;
 
     public OpenHashing()
     {
-        this.array = new Object[size];
+        this.array = new SinglyLinkedList[size];
         Arrays.fill(this.array, new SinglyLinkedList());
     }
 
-    public void addValue(AnyType t)
+    public void addValue(AnyType key) throws UnhashableDataTypeException
     {
+        this.array[getHashValue(key)].add(new Node(key));
+    }
+
+    public AnyType removeValue(AnyType key) throws UnhashableDataTypeException
+    {
+        SinglyLinkedList sLL = this.array[getHashValue(key)];
         
+        return (AnyType)sLL.removeData(key);
     }
 
-    @Override
-    public AnyType removeValue(int key)
+    public Object[] getValues(AnyType key) throws UnhashableDataTypeException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        ArrayList<AnyType> found = new ArrayList();
+        return this.array[getHashValue(key)].getAllData();
     }
-
-    @Override
-    public AnyType getValue(int key)
+    
+    public int getHashValue(AnyType  key)throws UnhashableDataTypeException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public Boolean isCollison(AnyType newValue, int key)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int hashVal = -1;        
+        
+        if(key instanceof Boolean){
+            hashVal = hash((Boolean)key);
+        }
+        else if(key instanceof String || key instanceof Character ){
+            hashVal = hash((String)key);
+        }
+        else if(
+                key instanceof Float || 
+                key instanceof Double ||
+                key instanceof Byte || 
+                key instanceof Short || 
+                key instanceof Integer || 
+                key instanceof Long){
+            hashVal = hash((Long)key);
+        }
+        else{
+            throw new UnhashableDataTypeException();
+        }                
+        return hashVal;
     }
 
     private int hash(boolean key)
@@ -64,15 +86,5 @@ public class OpenHashing<AnyType> implements HashingInterface<AnyType>
     private int hash(long key)
     {
         return (int)key % this.size;
-    }
-    
-    private int hash(double key)
-    {
-        return (int)key % this.size;
-    }    
-
-    public int hash(AnyType key)
-    {
-        
     }
 }
