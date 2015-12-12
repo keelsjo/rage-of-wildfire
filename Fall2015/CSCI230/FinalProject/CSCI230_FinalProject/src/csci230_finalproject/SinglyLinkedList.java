@@ -236,4 +236,10 @@ public class SinglyLinkedList<AnyType extends Comparable<? super AnyType>> imple
         }
         return newArr;
     }
+
+    @Override
+    public Node<AnyType> removeData(Node<AnyType> t)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 } // end SinglyLinkedList class definition

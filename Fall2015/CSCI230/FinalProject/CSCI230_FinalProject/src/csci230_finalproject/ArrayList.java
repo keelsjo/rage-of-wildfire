@@ -12,8 +12,8 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
     // instance variables
     private Object[] array;
     private int size = 0;
-    private final static int INITIAL_CAPACITY = 10;
-    private int capacity = INITIAL_CAPACITY;
+    private final static int INITIAL_CAPACITY = 11;
+    private int capacity;
     
     /**
      * Constructs an empty list with an initial capacity
@@ -24,7 +24,21 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
     public ArrayList() {
     	
     	array = new Object[ INITIAL_CAPACITY ];
+        capacity = INITIAL_CAPACITY;
     	
+    } // end constructor
+    
+    /**
+     * Constructs an empty list with an initial capacity provided by calling
+     * function
+     * 
+     * 
+     * @param manualCapacity
+     */
+    public ArrayList(int manualCapacity) {
+    	manualCapacity = manualCapacity % 2 == 0 ? manualCapacity + 1 : manualCapacity;
+    	array = new Object[ manualCapacity ];
+        this.capacity = manualCapacity;    	
     } // end constructor
  
     /**
@@ -58,17 +72,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
         }
         else
         {
-            if ( size >= capacity )
-            {
-                grow();
-            }
-
-            for(int i = size; i > index; i--)
-            {
-                array[i] = array[i - 1];
-            }
             array[index] = t;
-            size++;   	
         }        
     } // end add() method
  
@@ -206,4 +210,16 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
         this.array = newArray;
         this.capacity = newArray.length;
     } // end shrink() method
+
+    @Override
+    public AnyType removeData(AnyType t)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Object[] getAllData()
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 } // end ArrayList class definition
