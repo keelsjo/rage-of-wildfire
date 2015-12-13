@@ -1,5 +1,6 @@
 package csci230_finalproject;
 
+import java.util.Arrays;
 /**
  * ArrayList Data Structure
  * 
@@ -7,11 +8,10 @@ package csci230_finalproject;
  *
  * @param <AnyType>
  */
-public class ArrayList<AnyType extends Comparable<? super AnyType>> implements List<AnyType> {
+public class ArrayList<AnyType extends Comparable<? super AnyType>> implements List<AnyType>{
      
     // instance variables
-    private Object[] array;
-    private int size = 0;
+    private ClosedHashingElement[] array;
     private final static int INITIAL_CAPACITY = 11;
     private int capacity;
     
@@ -23,8 +23,9 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public ArrayList() {
     	
-    	array = new Object[ INITIAL_CAPACITY ];
+    	array = new ClosedHashingElement[ INITIAL_CAPACITY ];
         capacity = INITIAL_CAPACITY;
+        arrayFill();
     	
     } // end constructor
     
@@ -37,8 +38,9 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public ArrayList(int manualCapacity) {
     	manualCapacity = manualCapacity % 2 == 0 ? manualCapacity + 1 : manualCapacity;
-    	array = new Object[ manualCapacity ];
-        this.capacity = manualCapacity;    	
+    	array = new ClosedHashingElement[ manualCapacity ];
+        this.capacity = manualCapacity;    
+        arrayFill();
     } // end constructor
  
     /**
@@ -48,12 +50,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public void add( AnyType t) {
          
-    	if ( size >= capacity )
-        {
-            grow();
-        }
-    	array[size]=t;
-        size++;
+    	throw new UnsupportedOperationException("Removed for this implementation");
          
     } // end add() method
  
@@ -66,13 +63,13 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public void add(int index, AnyType t) throws IndexOutOfBoundsException {
          
-        if(index > size || index < 0)
+        if(index > capacity || index < 0)
         {
             throw new IndexOutOfBoundsException();
         }
         else
         {
-            array[index] = t;
+            array[index].setData(t);
         }        
     } // end add() method
  
@@ -85,13 +82,13 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public void set(int index, AnyType t) throws IndexOutOfBoundsException {
          
-        if(index > (size - 1))
+        if(index > (capacity - 1))
         {
             throw new IndexOutOfBoundsException();
         }
         else
         {
-            array[index] = t;
+            array[index].setData(t);
         }               
     } // end set() method
  
@@ -104,26 +101,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     
     public AnyType remove( int index ) throws IndexOutOfBoundsException {
-
-        if(index > (size - 1) || index < 0)
-        {
-            throw new IndexOutOfBoundsException();
-        }
-        else
-        {
-            AnyType found = (AnyType)array[index];
-            for(int i = index; i < (size - 1); i++)
-            {
-                array[i] = array[i + 1];
-            }
-            size--;
-
-            if ((size * 2) + 1 <= capacity)
-            {
-                shrink();
-            }        
-            return found;    
-        }           	
+        throw new UnsupportedOperationException("Removed for this implementation");
     }// end remove() method
  
     /**
@@ -135,7 +113,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public AnyType get(int index) throws IndexOutOfBoundsException {
 
-        if(index > (size - 1) || index < 0)
+        if(index > (capacity - 1) || index < 0)
         {
             throw new IndexOutOfBoundsException();
         }
@@ -152,9 +130,9 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public int size() {
          
-        return size;
+        return capacity;
          
-    } // end size() method
+    } // end capacity() method
  
     /**
      * Returns true if this list contains no elements.
@@ -163,7 +141,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      */
     public Boolean isEmpty() {
          
-        return ( size == 0 );
+        return ( capacity == 0 );
          
     } // end isEmpty() method
      
@@ -174,8 +152,7 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      * 
      */
     public void clear() {         
-       this.array = new Object[ INITIAL_CAPACITY ];
-       this.size = 0;
+       this.array = new ClosedHashingElement[ INITIAL_CAPACITY ];
        this.capacity = INITIAL_CAPACITY;
     } // end clear method
     
@@ -183,16 +160,8 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      * Double the capacity of the array
      * 
      */
-    private void grow() {
-    	
-    	Object[] newArray = new Object[size * 2];
-        
-        for(int i = 0; i < size; i++)
-        {
-            newArray[i] = array[i];
-        } 
-        this.array = newArray;
-        this.capacity = newArray.length;
+    private void grow() {    	
+    	throw new UnsupportedOperationException("Removed for this implementation");
     } // end grow() method
     
     
@@ -201,25 +170,47 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
      * 
      */
     private void shrink() {
-    	Object[] newArray = new Object[(int)Math.ceil(size / 2)];
-        
-        for(int i = 0; i < newArray.length; i++)
-        {
-            newArray[i] = array[i];
-        } 
-        this.array = newArray;
-        this.capacity = newArray.length;
+    	throw new UnsupportedOperationException("Removed for this implementation");
     } // end shrink() method
 
-    @Override
     public AnyType removeData(AnyType t)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = (Integer)t;
+        
+        if(index > (capacity - 1) || index < 0)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        else
+        {
+            AnyType found = (AnyType)array[index];
+            array[index].setData(null);              
+            return found;    
+        }           	
     }
 
-    @Override
     public Object[] getAllData()
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Object[] found = new Object[this.capacity];
+        ClosedHashingElement element;
+                
+        for(int i = 0; i < this.capacity; i++){
+            element = this.array[i];
+            
+            if(element.getData() != null){
+                found[i] = element.getData();
+            }
+            else if(element.getData() == null && element.getIsTombstone()){
+                found[i] = "Tombstone";
+            }
+            else{
+                found[i] = "null";
+            }
+        }
+        return found;
+    }
+    
+    private void arrayFill(){
+        Arrays.fill(array, new ClosedHashingElement());
     }
 } // end ArrayList class definition

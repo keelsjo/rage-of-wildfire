@@ -42,7 +42,7 @@ public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements
         ArrayList<AnyType> found = new ArrayList();
         return this.array[getHashValue(key)].getAllData();
     }
-    
+        
     public int getHashValue(AnyType  key)throws UnhashableDataTypeException
     {
         int hashVal = -1;        

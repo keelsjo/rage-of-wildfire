@@ -43,12 +43,13 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
     public Object removeValue(Object key) throws UnhashableDataTypeException
     {
         int index = getIndexOf(getHashValue(key), key);
+        return this.aL.removeData(index);
     }
 
     @Override
     public Object[] getValues(Object key) throws UnhashableDataTypeException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.aL.getAllData();
     }
     
     public int getHashValue(Object key) throws UnhashableDataTypeException
@@ -150,8 +151,10 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         int len_oldAL = oldAL.size();
         
         for(int i = 0; i < len_oldAL; i++){
-            if(oldAL.get(i) != null){
-                newHash.addValue(oldAL.get(i));
+            ClosedHashingElement element = (ClosedHashingElement)oldAL.get(i);
+            
+            if(element.getData() != null){
+                newHash.addValue(element.getData());
             }
         }
         newHash.addValue(newValue);
