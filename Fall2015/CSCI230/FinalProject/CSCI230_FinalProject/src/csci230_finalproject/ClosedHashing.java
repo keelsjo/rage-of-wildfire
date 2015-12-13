@@ -40,10 +40,9 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         }
     }
 
-    @Override
     public Object removeValue(Object key) throws UnhashableDataTypeException
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int index = getIndexOf(getHashValue(key), key);
     }
 
     @Override
@@ -119,6 +118,26 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
             this.aL = (ArrayList)objHash[0];
             this.capacity = (int)objHash[1];
         }
+    }
+    
+    private int getIndexOf(int hashValue, Object key){
+        int found = -1;        
+        int startIndex = hashValue;
+        int stopIndex = (startIndex) > (capacity - 1) ? 0 : startIndex + 1;
+               
+        
+        while(startIndex == stopIndex){
+            if(startIndex > capacity){
+                startIndex = startIndex % probeStep;
+            }
+            if(this.aL.get(startIndex) == key){
+                found = startIndex;
+                break;
+            }
+            startIndex += probeStep;
+        }
+        
+        return found;
     }
     
     private boolean isCollision(int hashVal)
