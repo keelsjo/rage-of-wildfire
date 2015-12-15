@@ -119,9 +119,21 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
         }
         else
         {
-            return (AnyType)array[index];    
+            return (AnyType)array[index].getData();    
         }
     } // end get() method
+    
+    public ClosedHashingElement getHashElement(int index) throws IndexOutOfBoundsException {
+
+        if(index > (capacity - 1) || index < 0)
+        {
+            throw new IndexOutOfBoundsException();
+        }
+        else
+        {
+            return array[index];    
+        }
+    }
  
     /**
      * Returns the number of elements in this list. 
@@ -211,6 +223,8 @@ public class ArrayList<AnyType extends Comparable<? super AnyType>> implements L
     }
     
     private void arrayFill(){
-        Arrays.fill(array, new ClosedHashingElement());
+        for(int i = 0; i < this.capacity; i++){
+            this.array[i] = new ClosedHashingElement();
+        }
     }
 } // end ArrayList class definition

@@ -13,8 +13,7 @@ package csci230_finalproject;
  */
 public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implements HashingInterface
 {    
-    private int capacity = 101;
-    private final int probeStep = 2;
+    private int capacity = 3;
     ArrayList aL; 
 
     public ClosedHashing()
@@ -33,10 +32,10 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         int hashVal = getHashValue(key);
         
         if(isCollision(hashVal)){
-            this.aL.add(hashVal, (Comparable)key);
+            probeHashTable_add(hashVal, (AnyType)key);
         }
         else{
-            probeHashTable_add(hashVal + probeStep, (AnyType)key);
+            this.aL.add(hashVal, (Comparable)key);
         }
     }
 
@@ -59,17 +58,11 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         if(key instanceof Boolean){
             hashVal = hash((Boolean)key);
         }
-        else if(key instanceof String || key instanceof Character ){
+        else if(key instanceof String){
             hashVal = hash((String)key);
         }
-        else if(
-                key instanceof Float || 
-                key instanceof Double ||
-                key instanceof Byte || 
-                key instanceof Short || 
-                key instanceof Integer || 
-                key instanceof Long){
-            hashVal = hash((Long)key);
+        else if(key instanceof Integer){
+            hashVal = hash((Integer)key);
         }
         else{
             throw new UnhashableDataTypeException();
@@ -87,32 +80,33 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         int total = 0;
         
         for(int i = 0; i < key.length(); i++){
-            total = (int)key.charAt(i);
+            total += (int)key.charAt(i);
         }
         return total % this.capacity;
     }
     
-    private int hash(long key)
+    private int hash(int key)
     {
-        return (int)key % this.capacity;
+        return Math.abs(key) % this.capacity;
     }
     
     private void probeHashTable_add(int index, AnyType t) throws UnhashableDataTypeException
     {
-        int startIndex = index - probeStep;
-        int stopIndex = (startIndex) > (capacity - 2) ? 0 : startIndex + 1;
+        int count = 0;
+        int current = index + 1;
         boolean isAdded = false;        
         
-        while(index == stopIndex){
-            if(index > capacity){
-                index = index % probeStep;
+        while(count < this.aL.size()){
+            if(current >= capacity - 1){
+                current = 0;
             }
-            if(this.aL.get(index) == null){
+            if(this.aL.get(current) == null){
                 this.aL.set(index, t);
                 isAdded = true;
                 break;
             }
-            index += probeStep;
+            current++;
+            count++;
         }
         if(!isAdded){
             Object[] objHash = rehash(this.aL, t);
@@ -124,18 +118,18 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
     private int getIndexOf(int hashValue, Object key){
         int found = -1;        
         int startIndex = hashValue;
-        int stopIndex = (startIndex) > (capacity - 1) ? 0 : startIndex + 1;
+        int stopIndex = startIndex == 0 ? this.aL.size() - 1 : startIndex - 1;
                
         
         while(startIndex == stopIndex){
             if(startIndex > capacity){
-                startIndex = startIndex % probeStep;
+                startIndex = 0;
             }
             if(this.aL.get(startIndex) == key){
                 found = startIndex;
                 break;
             }
-            startIndex += probeStep;
+            startIndex++;
         }
         
         return found;
@@ -143,7 +137,7 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
     
     private boolean isCollision(int hashVal)
     {
-        return this.aL.get(hashVal) == null;
+        return this.aL.get(hashVal) != null;
     }
     
     private Object[] rehash(ArrayList oldAL, AnyType newValue) throws UnhashableDataTypeException{
@@ -151,7 +145,7 @@ public class ClosedHashing<AnyType extends Comparable<? super AnyType>> implemen
         int len_oldAL = oldAL.size();
         
         for(int i = 0; i < len_oldAL; i++){
-            ClosedHashingElement element = (ClosedHashingElement)oldAL.get(i);
+            ClosedHashingElement element = (ClosedHashingElement)oldAL.getHashElement(i);
             
             if(element.getData() != null){
                 newHash.addValue(element.getData());

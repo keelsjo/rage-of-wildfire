@@ -6,7 +6,6 @@
 
 package csci230_finalproject;
 
-import java.util.Arrays;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +21,7 @@ public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements
     public OpenHashing()
     {
         this.array = new SinglyLinkedList[size];
-        Arrays.fill(this.array, new SinglyLinkedList());
+        arrayFill();
     }
 
     public void addValue(AnyType key) throws UnhashableDataTypeException
@@ -39,7 +38,6 @@ public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements
 
     public Object[] getValues(AnyType key) throws UnhashableDataTypeException
     {
-        ArrayList<AnyType> found = new ArrayList();
         return this.array[getHashValue(key)].getAllData();
     }
         
@@ -50,22 +48,22 @@ public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements
         if(key instanceof Boolean){
             hashVal = hash((Boolean)key);
         }
-        else if(key instanceof String || key instanceof Character ){
+        else if(key instanceof String){
             hashVal = hash((String)key);
         }
-        else if(
-                key instanceof Float || 
-                key instanceof Double ||
-                key instanceof Byte || 
-                key instanceof Short || 
-                key instanceof Integer || 
-                key instanceof Long){
-            hashVal = hash((Long)key);
+        else if(key instanceof Integer){
+            hashVal = hash((Integer)key);
         }
         else{
             throw new UnhashableDataTypeException();
         }                
         return hashVal;
+    }
+    
+    private void arrayFill(){
+        for(int i = 0; i < this.size; i++){
+            this.array[i] = new SinglyLinkedList();
+        }
     }
 
     private int hash(boolean key)
@@ -78,13 +76,13 @@ public class OpenHashing<AnyType extends Comparable<? super AnyType>> implements
         int total = 0;
         
         for(int i = 0; i < key.length(); i++){
-            total = (int)key.charAt(i);
+            total += (int)key.charAt(i);
         }
         return total % this.size;
     }
     
-    private int hash(long key)
+    private int hash(int key)
     {
-        return (int)key % this.size;
+        return Math.abs(key) % this.size;
     }
 }
